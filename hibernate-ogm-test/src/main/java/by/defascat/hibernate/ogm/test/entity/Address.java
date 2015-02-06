@@ -2,6 +2,7 @@ package by.defascat.hibernate.ogm.test.entity;
 
 import java.io.Serializable;
 import javax.persistence.Embeddable;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 /**
  *
@@ -9,7 +10,11 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Address implements Serializable {
+    
+    @IndexedEmbedded // Couch
     private String city;
+    
+    @IndexedEmbedded // Couch
     private String country;
 
     public String getCity() {

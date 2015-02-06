@@ -10,6 +10,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <hibernate.ogm.version>4.1.1.Final</hibernate.ogm.version>
+        <!-- NEO4J -->
+        <!-- hibernate.search.version>4.5.3.Final</hibernate.search.version -->
+        <!-- Couch  -->
+        <hibernate.search.version>5.0.1.Final</hibernate.search.version>
     </properties>
     <dependencies>
         <dependency>
@@ -32,12 +36,26 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.3.8.Final</version>
         </dependency>
+        
+        <!-- Required for search in couch DB -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>${hibernate.search.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-engine</artifactId>
+            <version>${hibernate.search.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Needed for transactions in JPA -->
         <dependency>
             <groupId>org.jboss.jbossts</groupId>
             <artifactId>jbossjta</artifactId>

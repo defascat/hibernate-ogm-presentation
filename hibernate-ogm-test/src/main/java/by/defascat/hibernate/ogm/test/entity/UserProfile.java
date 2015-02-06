@@ -12,18 +12,27 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 /**
  *
  * @author andy
  */
 @Entity
+@Indexed(index="indexes/profiles") // Required for couch search
 public class UserProfile implements Serializable {
     @Id
     @Column(length = 32)
     private String name;
     
-    @Column(nullable = false)
+    // @Column(nullable = false)
+    /* 
+        Couch fails when retreiving object 
+        java.lang.IllegalArgumentException: Can not set [B field by.defascat.hibernate.ogm.test.entity.UserProfile.password to java.lang.String
+    */
+    @Transient
     private byte[] password;
     
     @Lob
@@ -34,6 +43,7 @@ public class UserProfile implements Serializable {
     private List<AccelerometerRecord> records;
 
     @Embedded
+    @IndexedEmbedded // Couch requirement
     private Address address;
     
     public String getName() {
@@ -47,7 +57,6 @@ public class UserProfile implements Serializable {
     public byte[] getPassword() {
         return password;
     }
-
 
     public void setPassword(String password) throws NoSuchAlgorithmException {
         this.password = MessageDigest.getInstance("MD5").digest((name + password).getBytes());

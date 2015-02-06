@@ -6,9 +6,8 @@
         <class>by.defascat.hibernate.ogm.test.entity.UserProfile</class>
         <properties>
             <property name="hibernate.ogm.datastore.provider" value="mongodb"/>
-            <property name="hibernate.ogm.datastore.database" value="testU"/>
+            <property name="hibernate.ogm.datastore.database" value="testu"/>
             <property name="hibernate.ogm.datastore.create_database" value="true"/>
-
         </properties>
     </persistence-unit>
     <persistence-unit name="COUCH" transaction-type="RESOURCE_LOCAL">
@@ -16,6 +15,9 @@
         <class>by.defascat.hibernate.ogm.test.entity.AccelerometerRecord</class>
         <class>by.defascat.hibernate.ogm.test.entity.UserProfile</class>
         <properties>
+            <property name="hibernate.ogm.datastore.provider" value="couchdb_experimental"/>
+            <property name="hibernate.ogm.datastore.database" value="testu"/>
+            <property name="hibernate.ogm.datastore.create_database" value="true"/>
         </properties>
     </persistence-unit>
     <persistence-unit name="NEO4J" transaction-type="RESOURCE_LOCAL">
@@ -23,6 +25,8 @@
         <class>by.defascat.hibernate.ogm.test.entity.AccelerometerRecord</class>
         <class>by.defascat.hibernate.ogm.test.entity.UserProfile</class>
         <properties>
+            <property name="hibernate.ogm.datastore.provider" value="neo4j_embedded"/>
+            <property name="hibernate.ogm.neo4j.database_path" value="testu"/>
         </properties>
     </persistence-unit>
 </persistence>
