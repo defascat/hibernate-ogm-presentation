@@ -29,6 +29,9 @@ import org.junit.runners.MethodSorters;
 public abstract class BasicTest {
     protected EntityManager em;
     protected EntityManagerFactory emf;
+    
+    protected abstract String getDataSource();
+    protected abstract String getNativeQuery(final String newCity);
 
     @After
     public void after() {
@@ -43,7 +46,7 @@ public abstract class BasicTest {
     }
 
     @Test
-    public void test1Insert() throws NoSuchAlgorithmException, IOException {
+    public void test1InsertProfile() throws NoSuchAlgorithmException, IOException {
         EntityTransaction tm = em.getTransaction();
         tm.begin();
         final UserProfile userProfile = new UserProfile();
@@ -82,13 +85,42 @@ public abstract class BasicTest {
         tm.commit();
     }
 
-    public void test3FindItem() throws NoSuchAlgorithmException, IOException {
+    @Test
+    public void test3FindItemJPQL() throws NoSuchAlgorithmException, IOException {
         final List<UserProfile> items = em.createQuery("from UserProfile p where p.name = 'testuser'").getResultList();
         Assert.assertEquals(1, items.size());
         Assert.assertEquals("testuser", items.get(0).getName());
     }
 
-    public void test4RemoveItem() throws NoSuchAlgorithmException, IOException {
+    @Test
+    public void test4UpdateItem() throws NoSuchAlgorithmException, IOException {
+        final UserProfile user = em.find(UserProfile.class, "testuser");
+        Assert.assertEquals("Minsk", user.getAddress().getCity());
+        
+        EntityTransaction tm = em.getTransaction();
+        tm.begin();
+        user.getAddress().setCity("Borovlyany");
+        em.merge(user);
+        tm.commit();
+    }
+
+    @Test
+    public void test5FindNative() throws NoSuchAlgorithmException, IOException {
+        final String newCity = "Borovlyany";
+        final List<UserProfile> items = em.createNativeQuery(getNativeQuery(newCity), UserProfile.class).getResultList();
+        Assert.assertEquals(1, items.size());
+        Assert.assertEquals("testuser", items.get(0).getName());
+        Assert.assertEquals(newCity, items.get(0).getAddress().getCity());
+    }
+
+    @Test
+    public void test5aFindNativeWrong() throws NoSuchAlgorithmException, IOException {
+        final List<UserProfile> items = em.createNativeQuery(getNativeQuery("Lesnoy"), UserProfile.class).getResultList();
+        Assert.assertEquals(0, items.size());
+    }
+
+    @Test
+    public void test6RemoveItem() throws NoSuchAlgorithmException, IOException {
         final UserProfile user = em.find(UserProfile.class, "testuser");
         EntityTransaction tm = em.getTransaction();
         tm.begin();
@@ -96,10 +128,10 @@ public abstract class BasicTest {
         tm.commit();
     }
 
-    public void test5FindItem() throws NoSuchAlgorithmException, IOException {
+    @Test
+    public void test7FindItemAfterRemoval() throws NoSuchAlgorithmException, IOException {
         final List<UserProfile> items = em.createQuery("from UserProfile p where p.name = 'testuser'").getResultList();
         Assert.assertEquals(0, items.size());
     }
 
-    protected abstract String getDataSource();
 }

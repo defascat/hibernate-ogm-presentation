@@ -9,4 +9,9 @@ public class MongoTest extends BasicTest {
     protected String getDataSource() {
         return "MONGO";
     }
+
+    @Override
+    protected String getNativeQuery(String newCity) {
+        return "db.UserProfile.find({\"address.city\": \"" + newCity + "\"})";
+    }
 }
